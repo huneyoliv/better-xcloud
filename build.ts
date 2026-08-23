@@ -159,7 +159,7 @@ async function buildPatches() {
     const files = await readdir(inputDir);
     const tsFiles = files.filter(file => file.endsWith('.ts'));
 
-    tsFiles.forEach(async file => {
+    for (const file of tsFiles) {
         // You can perform any operation with each TypeScript file
         console.log(`Building patch: ${file}`);
         const filePath = `${inputDir}/${file}`;
@@ -188,8 +188,8 @@ async function buildPatches() {
 
         // Save
         await Bun.write(outputFile, code);
-        console.log(`Patch built successfully: ${file}`)
-      });
+        console.log(`Patch built successfully: ${file}`);
+    }
 }
 
 async function build(target: BuildTarget, params: { version: string, variant: BuildVariant, pretty: boolean, meta: boolean }, config: any={}) {
@@ -215,6 +215,13 @@ async function build(target: BuildTarget, params: { version: string, variant: Bu
     outputMetaName += '.meta.js';
 
     const outDir = './dist';
+
+    process.env.BUILD_TARGET = target;
+    process.env.BUILD_VARIANT = variant;
+    process.env.SCRIPT_VERSION = version;
+    Bun.env.BUILD_TARGET = target;
+    Bun.env.BUILD_VARIANT = variant;
+    Bun.env.SCRIPT_VERSION = version;
 
     await buildPatches();
 

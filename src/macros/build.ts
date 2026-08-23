@@ -1,11 +1,13 @@
 import stylus from 'stylus';
 
 export const isFullVersion = () => {
-    return Bun.env.BUILD_VARIANT === 'full';
+    const variant = process.env.BUILD_VARIANT || Bun.env.BUILD_VARIANT;
+    return variant ? variant === 'full' : true;
 };
 
 export const isLiteVersion = () => {
-    return Bun.env.BUILD_VARIANT === 'lite';
+    const variant = process.env.BUILD_VARIANT || Bun.env.BUILD_VARIANT;
+    return variant === 'lite';
 };
 
 export const renderStylus = async () => {
